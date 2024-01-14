@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Places from "./Places.jsx";
 import Error from "../Error.jsx";
+import { sortPlacesByDistance } from "../loc.js";
 
 export default function AvailablePlaces({ onSelectPlace }) {
   const [AvailablePlaces, setAvailablePlaces] = useState([]);
@@ -21,30 +22,30 @@ export default function AvailablePlaces({ onSelectPlace }) {
           throw new Error("Failed to fetch places");
         }
 
-        setAvailablePlaces(resData.places);
+        navigator.geolocation.getCurrentPosition((position) => {
+          const sortedPlaces = sortPlacesByDistance(
+            resData.places,
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          setAvailablePlaces(sortedPlaces);
+          setIsFetching(false);
+        });
       } catch (error) {
-        setError({message: error.message || 'Could not fetch places, please try again later.'});
+        setError({
+          message:
+            error.message || "Could not fetch places, please try again later.",
+        });
+        setIsFetching(false);
       }
-
-      setIsFetching(false);
+      
     } // end of async function fetchPlaces()
 
     fetchPlaces();
-
-    // setIsFetching(true);
-
-    // fetch("http://localhost:3000/places")
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((resData) => {
-    //     setAvailablePlaces(resData.places);
-    //     setIsFetching(false);
-    //   });
   }, []); // end of useEffect(() => {
 
   if (error) {
-    return <Error title="An error occured!" message={error.message} />
+    return <Error title="An error occured!" message={error.message} />;
   }
 
   return (
