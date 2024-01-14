@@ -3,15 +3,20 @@ import Places from "./Places.jsx";
 
 export default function AvailablePlaces({ onSelectPlace }) {
   const [AvailablePlaces, setAvailablePlaces] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    async function fetchPlaces() {
-      const response = await fetch("http://localhost:3000/places");
-      const resData = await response.json();
-      setAvailablePlaces(resData.places);
-    }
+    // async function fetchPlaces() {
+    //   setIsFetching(true);
+    //   const response = await fetch("http://localhost:3000/places");
+    //   const resData = await response.json();
+    //   setAvailablePlaces(resData.places);
+    //   setIsFetching(false);
+    // }
 
-    fetchPlaces();
+    //fetchPlaces();
+
+    // setIsFetching(true);
 
     // fetch("http://localhost:3000/places")
     //   .then((response) => {
@@ -19,6 +24,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
     //   })
     //   .then((resData) => {
     //     setAvailablePlaces(resData.places);
+    //     setIsFetching(false);
     //   });
   }, []); // end of useEffect(() => {
 
@@ -26,8 +32,8 @@ export default function AvailablePlaces({ onSelectPlace }) {
     <Places
       title="Available Places"
       places={AvailablePlaces}
-      isLoading={true}
-      loadingText='Fetching place data...'
+      isLoading={isFetching}
+      loadingText="Fetching place data..."
       fallbackText="No places available."
       onSelectPlace={onSelectPlace}
     />
