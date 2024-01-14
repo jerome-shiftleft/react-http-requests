@@ -23,7 +23,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
 
         setAvailablePlaces(resData.places);
       } catch (error) {
-        setError(error);
+        setError({message: error.message || 'Could not fetch places, please try again later.'});
       }
 
       setIsFetching(false);
